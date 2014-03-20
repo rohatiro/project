@@ -5,6 +5,7 @@ article_view_html = "<div class='deletearticle'></div><p><strong>Nombre: </stron
 article = Backbone.Model.extend();
 
 article_view = Backbone.View.extend({
+	routes
 	events: {
 		"click .deletearticle": "clear"
 	},
@@ -32,7 +33,18 @@ article_view = Backbone.View.extend({
 });
 
 articles = Backbone.Collection.extend({
-	model: article
+	initialize: function () {
+		this.fetch();
+	},
+	model: article,
+	url: '/db',
+	parse: function(models){
+		models.data = _.map(models.data, function(val) {
+			val.creado = new Date();
+			return val;
+		});
+		return models.data;
+	}
 });
 
 $(function(){
@@ -45,7 +57,7 @@ $(function(){
 	articles_1.on('add', function (model) {
 		var view = new article_view(model);
 		view.render();
-		$('#articles').append(view.$el);
+		$('#articles').prepend(view.$el);
 	});
 
 	function CancelDefault (e) {

@@ -1,0 +1,33 @@
+{
+	"data": [{
+		"nombre":"Roberto",
+		"apellido":"Tienda",
+		"edad":22
+		},
+		{
+		"nombre":"Haziel",
+		"apellido":"Tienda",
+		"edad":22
+		},
+		{
+		"nombre":"Roberto",
+		"apellido":"Rodriguez",
+		"edad":22
+		},
+		{
+		"nombre":"Roberto",
+		"apellido":"Rodriguez",
+		"edad":22
+		},
+		{
+		"nombre":"Tienda",
+		"apellido":"Rodriguez",
+		"edad":22
+		},
+		{
+		"nombre":"Tienda",
+		"apellido":"Rohatiro",
+		"edad":22
+		}
+	]
+}

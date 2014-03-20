@@ -1,9 +1,10 @@
-var express, server, swig, path, root, approot, publicdir;
+var express, server, swig, path, root, approot, publicdir,fs;
 
 //plugins
 path = require('path');
 express = require('express');
 swig = require('swig');
+fs = require('fs');
 
 //direcciones
 root = path.resolve(__dirname,'.');
@@ -26,6 +27,11 @@ server.configure(function () {
 //rutas
 server.get('/', function (req, res) {
 	res.render('index');
+});
+
+server.get('/db', function (req, res) {
+	var database = JSON.parse(fs.readFileSync('./database.json').toString());
+	res.send(database);
 });
 
 //Inicio del servidor
