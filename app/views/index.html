@@ -5,51 +5,31 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>Bienvenido</title>
 	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+	<link rel="stylesheet" href="css/main.css">
 	<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
 	<script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
 	<script type="text/javascript" src="bower_components/backbone/backbone.js"></script>
 </head>
 <body>
-	<section id="backbone"></section>
-	<script type="text/javascript">
-	var article, article_view, articles, article_view_html, articles_1;
-	var obj = {
-		nombre: "roberto",
-		apellido: "tienda",
-		edad: 22,
-		creado: new Date()
-	};
-	article_view_html = "<p><strong>Nombre: </strong><%= nombre %></p><p><strong>Apellido: </strong><%= apellido %></p><p><strong>Edad: </strong><%= edad %></p><p><strong>Registro Creado: </strong><%= creado %></p>";
-	$(function(){
-		article = Backbone.Model.extend();
-		article_view = Backbone.View.extend({
-			tagName: "div",
-			className: "article",
-			initialize: function (model) {
-				var self;
-				self = this;
-				self.model = model;
-				self.model.on('change', self.render, this);
-				self.template = _.template(article_view_html);
-			},
-			render: function () {
-				var self, locals;
-				self = this;
-				locals = self.model.toJSON();
-				self.$el.html(self.template(locals));
-				return this;
-			}
-		});
-		articles = Backbone.Collection.extend({
-			model: article
-		});
-		articles_1 = new articles();
-		articles_1.on('add', function (model) {
-			var view = new article_view(model);
-			view.render();
-			$('#backbone').append(view.$el);
-		});
-	});
-	</script>
+	<section id="backbone">
+		<article id="newarticle">
+			<form action="" method="post" id="newarticleform" >
+				<div class="row">
+					<input type="text" name="nombre" placeholder="Nombre" id="articlenombre"  />
+				</div>
+				<div class="row">
+					<input type="text" name="apellido" placeholder="Apellido" id="articleapellido" />
+				</div>
+				<div class="row">
+					<input type="text" name="edad" placeholder="Edad" id="articleedad" />
+				</div>
+				<div class="row">
+					<input type="submit" value="Agregar" />
+				</div>
+			</form>
+		</article>
+		<article id="articles"></article>
+	</section>
+	<script type="text/javascript" src="js/main.js" ></script>
 </body>
 </html>

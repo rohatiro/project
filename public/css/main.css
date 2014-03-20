@@ -1,0 +1,57 @@
+body {
+	background-color: #aaa;
+}
+
+#articles {
+	overflow: hidden;
+}
+
+#backbone {
+	background-color: white;
+	margin: 0 auto;
+	overflow: hidden;
+	width: 700px;
+}
+
+#newarticle {
+	background-color: #ccc;
+	margin: 0 auto 1em auto;
+	text-align: center;
+	width: 400px;
+}
+
+#newarticle > form {
+	overflow: hidden;
+}
+
+.article {
+	border-bottom: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-top: 5px solid #ddd;
+	box-sizing: border-box;
+	padding: 0.5em;
+	position: relative;
+}
+
+.article:not(:first-child) {
+	margin-top: 1em;
+}
+
+.deletearticle {
+	border: 1px solid #999;
+	border-radius: 50%;
+	height: 0.7em;
+	position: absolute;
+	right: 0.5em;
+	top: 0.2em;
+	width: 0.7em;
+}
+
+.deletearticle:hover {
+	background-color: #eee;
+}
+
+.row {
+	margin: 1em;
+}
