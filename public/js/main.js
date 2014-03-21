@@ -5,7 +5,6 @@ article_view_html = "<div class='deletearticle'></div><p><strong>Nombre: </stron
 article = Backbone.Model.extend();
 
 article_view = Backbone.View.extend({
-	routes
 	events: {
 		"click .deletearticle": "clear"
 	},
