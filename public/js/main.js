@@ -1,6 +1,6 @@
 var article, article_view, articles, article_view_html;
 
-article_view_html = "<div class='deletearticle'></div><p><strong>Nombre: </strong><%= nombre %></p><p><strong>Apellido: </strong><%= apellido %></p><p><strong>Edad: </strong><%= edad %></p><p><strong>Registro Creado: </strong><%= creado %></p>";
+article_view_html = "<div class='deletearticle'></div><p><strong>Nombre: </strong><%= nombre %></p><p><strong>Apellido: </strong><%= apellido %></p><p><strong>Edad: </strong><%= edad %></p><p><strong>Registro Creado: </strong><%= created %></p>";
 
 article = Backbone.Model.extend();
 
@@ -38,11 +38,11 @@ articles = Backbone.Collection.extend({
 	model: article,
 	url: '/db',
 	parse: function(models){
-		models.data = _.map(models.data, function(val) {
-			val.creado = new Date();
+		models = _.map(models, function(val) {
+			val.created = new Date(val.created);
 			return val;
 		});
-		return models.data;
+		return models;
 	}
 });
 
@@ -71,7 +71,11 @@ $(function(){
 				creado: new Date()
 			};
 
-			articles_1.add(obj);
+			// articles_1.add(obj);
+
+			$.post('/article', obj, function(data){
+				console.log(data);
+			});
 
 			form.find('#articlenombre').val('');
 			form.find('#articleapellido').val('');
