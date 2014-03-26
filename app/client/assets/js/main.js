@@ -1,6 +1,7 @@
-var article, article_view, articles, article_view_html;
+var article, article_view, articles, article_view_html, article_edit, article_edit_html;
 
-article_view_html = "<div class='deletearticle'></div><p><strong>Nombre: </strong><%= nombre %></p><p><strong>Apellido: </strong><%= apellido %></p><p><strong>Edad: </strong><%= edad %></p><p><strong>Registro Creado: </strong><%= created %></p>";
+article_view_html = "<div class='editarticle article-button'></div><div class='deletearticle article-button'></div><p><strong>Nombre: </strong><%= nombre %></p><p><strong>Apellido: </strong><%= apellido %></p><p><strong>Edad: </strong><%= edad %></p><p><strong>Registro Creado: </strong><%= created %></p>";
+article_edit_html = "";
 
 article = Backbone.Model.extend();
 
@@ -21,13 +22,21 @@ article_view = Backbone.View.extend({
 		var self, locals;
 		self = this;
 		locals = self.model.toJSON();
+		locals.created = new Date(locals.created);
 		self.$el.html(self.template(locals));
 		return this;
 	},
 	clear: function () {
 		this.off();
 		this.$el.remove();
-		this.model.destroy();
+		this.model.destroy({
+			success: function() {
+				console.log(arguments);
+			},
+			error: function() {
+				console.log(arguments);	
+			}
+		});
 	}
 });
 
@@ -36,7 +45,7 @@ articles = Backbone.Collection.extend({
 		this.fetch();
 	},
 	model: article,
-	url: '/db',
+	url: '/articles',
 	parse: function(models){
 		models = _.map(models, function(val) {
 			val.created = new Date(val.created);
@@ -54,6 +63,7 @@ $(function(){
 
 	articles_1 = new articles();
 	articles_1.on('add', function (model) {
+		console.log('Creando Vista');
 		var view = new article_view(model);
 		view.render();
 		$('#articles').prepend(view.$el);
@@ -68,13 +78,13 @@ $(function(){
 				nombre: form.find('#articlenombre').val(),
 				apellido: form.find('#articleapellido').val(),
 				edad: form.find('#articleedad').val(),
-				creado: new Date()
+				created: new Date()
 			};
 
-			// articles_1.add(obj);
-
-			$.post('/article', obj, function(data){
-				console.log(data);
+			var model = articles_1.create(obj, {
+				success: function(response){
+					model.id = response.id;
+				}
 			});
 
 			form.find('#articlenombre').val('');

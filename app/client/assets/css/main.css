@@ -38,18 +38,31 @@ body {
 	margin-top: 1em;
 }
 
-.deletearticle {
-	border: 1px solid #999;
+.article-button {
 	border-radius: 50%;
+	border: 1px solid #999;
 	height: 0.7em;
 	position: absolute;
-	right: 0.5em;
 	top: 0.2em;
 	width: 0.7em;
 }
 
+.deletearticle {
+	background-color: #f99;
+	right: 0.5em;
+}
+
 .deletearticle:hover {
-	background-color: #eee;
+	background-color: #d55;
+}
+
+.editarticle {
+	background-color: #9f9;
+	right: 2em;
+}
+
+.editarticle:hover {
+	background-color: #5d5;
 }
 
 .row {
