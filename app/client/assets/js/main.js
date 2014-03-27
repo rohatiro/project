@@ -1,13 +1,16 @@
 var article, article_view, articles, article_view_html, article_edit, article_edit_html;
 
 article_view_html = "<div class='editarticle article-button'></div><div class='deletearticle article-button'></div><p><strong>Nombre: </strong><%= nombre %></p><p><strong>Apellido: </strong><%= apellido %></p><p><strong>Edad: </strong><%= edad %></p><p><strong>Registro Creado: </strong><%= created %></p>";
-article_edit_html = "";
+article_edit_html = "<form><p><strong>Nombre: </strong><input type='text' name='nombre' placeholder='Nombre' id='editarticlenombre' value='<%= nombre %>' /></p><p><strong>Apellido: </strong><input type='text' name='apellido' placeholder='Apellido' id='editarticleapellido' value='<%= apellido %>' /></p><p><strong>Edad: </strong><input type='text' name='edad' placeholder='Edad' id='editarticleedad' value='<%= edad %>' /></p><input type='submit' class='updatearticle' value='Actualizar'/><input type='submit' class='cancelupdatearticle' value='Cancelar'/></form>";
 
 article = Backbone.Model.extend();
 
 article_view = Backbone.View.extend({
 	events: {
-		"click .deletearticle": "clear"
+		"click .deletearticle": "clear",
+		"click .editarticle": "edit",
+		"click .cancelupdatearticle": "cancelUpdateArticle",
+		"click .updatearticle": "updateArticle"
 	},
 	tagName: "div",
 	className: "article",
@@ -17,11 +20,12 @@ article_view = Backbone.View.extend({
 		self.model = model;
 		self.model.on('change', self.render, this);
 		self.template = _.template(article_view_html);
-	},
-	render: function () {
+		self.editTemplate = _.template(article_edit_html);
+	},	
+	render: function (model) {
 		var self, locals;
 		self = this;
-		locals = self.model.toJSON();
+		locals = model ? model.toJSON() : self.model.toJSON();
 		locals.created = new Date(locals.created);
 		self.$el.html(self.template(locals));
 		return this;
@@ -29,14 +33,44 @@ article_view = Backbone.View.extend({
 	clear: function () {
 		this.off();
 		this.$el.remove();
-		this.model.destroy({
-			success: function() {
-				console.log(arguments);
-			},
-			error: function() {
-				console.log(arguments);	
-			}
-		});
+		// this.model.destroy({
+		// 	success: function(deletedmodel,unknown,xhr) {
+		// 		console.log(arguments);
+		// 	},
+		// 	error: function(err) {
+		// 		console.log(arguments);	
+		// 	}
+		// });
+		this.model.destroy();
+	},
+	edit: function () {
+		var self, locals;
+		self = this;
+		locals = self.model.toJSON();
+		locals.created = new Date(locals.created);
+		self.$el.html(self.editTemplate(locals));
+		self.$el.addClass('editformarticle');
+		return this;
+	},
+	cancelUpdateArticle: function(e) {
+		e.preventDefault();
+		var self;
+		self = this;
+		self.$el.removeClass('editformarticle');
+		self.render();
+	},
+	updateArticle: function(e) {
+		e.preventDefault();
+		var obj,form,self;
+		self = this;
+		form = self.$el;
+		obj = {
+			nombre: form.find('#editarticlenombre').val(),
+			apellido: form.find('#editarticleapellido').val(),
+			edad: parseInt(form.find('#editarticleedad').val(),10),
+		};
+		// self.model.set(obj);
+		self.model.save(obj,{wait:true});
 	}
 });
 
@@ -63,7 +97,6 @@ $(function(){
 
 	articles_1 = new articles();
 	articles_1.on('add', function (model) {
-		console.log('Creando Vista');
 		var view = new article_view(model);
 		view.render();
 		$('#articles').prepend(view.$el);

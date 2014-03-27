@@ -25,8 +25,18 @@ module.exports = function(server) {
 	server.del('/articles/:id', function(req, res) {
 		models.Articles.forge({id:req.params.id}).fetch().then(function(article){
 			article.destroy().then(function(){
+				console.log('Articulo eliminado');
 				var delobject = article;
 				res.send(delobject);
+			});
+		});
+	});
+	server.put('/articles/:id', function(req, res) {
+		delete req.body.created;
+		delete req.body.id;
+		models.Articles.forge({id:req.params.id}).fetch().then(function(article) {
+			article.save(req.body).then(function(model){
+				res.send(model);
 			});
 		});
 	});
